@@ -1,0 +1,543 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Design tokens ---------- */
+:root {
+  --bg: #fffcf2;
+  --surface: #ffffff;
+  --surface-2: #fff4cc;
+  --ink: #15120a;
+  --muted: #625a45;
+  --line: rgba(21, 18, 10, 0.12);
+  --brand: #ffc21a;
+  --brand-ink: #15120a;
+  --glow: rgba(255, 194, 26, 0.38);
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0d0b06;
+  --surface: #16130b;
+  --surface-2: #211c0d;
+  --ink: #fff8e1;
+  --muted: #b0a78d;
+  --line: rgba(255, 248, 225, 0.12);
+  --glow: rgba(255, 194, 26, 0.24);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--brand);
+    color: var(--brand-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+/* Component classes live in the components layer so Tailwind utilities
+   (max-md:hidden, !h-16 …) can always override them. */
+@layer components {
+/* ---------- Layout primitives (one spacing scale, used everywhere) ---------- */
+.container-x {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 640px) {
+  .container-x {
+    padding-inline: 2rem;
+  }
+}
+.section {
+  padding-block: 4.5rem;
+}
+@media (min-width: 768px) {
+  .section {
+    padding-block: 7rem;
+  }
+}
+
+/* ---------- Typography ---------- */
+.h1 {
+  font-size: clamp(3.4rem, 12vw, 7.75rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  text-wrap: balance;
+}
+.h2 {
+  font-size: clamp(2rem, 5.2vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  text-wrap: balance;
+}
+.h3 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+.lead {
+  font-size: clamp(1.05rem, 2vw, 1.28rem);
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mark {
+  background: linear-gradient(transparent 60%, var(--brand) 60% 90%, transparent 90%);
+  padding-inline: 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  height: 3rem;
+  padding-inline: 1.35rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.25s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-sm {
+  height: 2.5rem;
+  padding-inline: 1rem;
+  font-size: 0.875rem;
+}
+.btn-xl {
+  height: 4rem;
+  padding-inline: 2.25rem;
+  font-size: 1.2rem;
+}
+.btn-ghost {
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--surface) 72%, transparent);
+  backdrop-filter: blur(10px);
+}
+.btn-ghost:hover {
+  border-color: var(--ink);
+}
+.btn-ink {
+  background: var(--ink);
+  color: var(--bg);
+}
+.btn-ink:hover {
+  transform: translateY(-2px);
+}
+.btn-buy {
+  position: relative;
+  overflow: hidden;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: 800;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    0 0 0 1px rgb(0 0 0 / 0.08),
+    0 14px 34px -10px var(--glow);
+}
+.btn-buy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.6) 48%,
+    transparent 66%
+  );
+  transform: translateX(-130%);
+  animation: shine 4s ease-in-out infinite;
+}
+.btn-buy:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    0 0 0 1px rgb(0 0 0 / 0.1),
+    0 20px 44px -10px var(--glow);
+}
+.btn-buy-pulse {
+  animation: ring 2.6s ease-out infinite;
+}
+
+/* ---------- Surfaces ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+}
+.card-hover {
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.25s ease,
+    box-shadow 0.35s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--brand) 70%, var(--line));
+  box-shadow: 0 24px 50px -28px var(--glow);
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+.live-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgb(34 197 94 / 0.6);
+  animation: live 2s ease-out infinite;
+}
+
+/* ---------- Backgrounds ---------- */
+.hero-bg {
+  background:
+    radial-gradient(55% 50% at 82% 18%, var(--glow), transparent 70%),
+    radial-gradient(40% 40% at 8% 92%, color-mix(in oklab, var(--brand) 16%, transparent), transparent 70%);
+}
+.lattice {
+  background-image:
+    linear-gradient(45deg, var(--line) 1px, transparent 1px),
+    linear-gradient(-45deg, var(--line) 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: radial-gradient(70% 65% at 75% 25%, #000, transparent);
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  background-color: color-mix(in oklab, var(--bg) 70%, transparent);
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(14px) saturate(1.4);
+}
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    animation: header-in linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 90px;
+  }
+}
+
+/* Mobile buy bar: appears once the hero's own Buy button has scrolled away. */
+@supports (animation-timeline: scroll()) {
+  .sticky-buy {
+    animation: sticky-in linear both;
+    animation-timeline: scroll(root);
+    animation-range: 480px 640px;
+  }
+}
+
+/* ---------- Motion ---------- */
+.enter {
+  animation: enter 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 45%;
+  }
+}
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+.float-slow {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: -2s;
+}
+.spin-slow {
+  animation: spin 38s linear infinite;
+}
+.marquee {
+  display: flex;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  flex: none;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2), var(--surface), var(--surface-2));
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: 1rem;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(36px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1.5deg);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes shine {
+  0%,
+  55% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+@keyframes ring {
+  0% {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55),
+      0 0 0 1px rgb(0 0 0 / 0.08),
+      0 0 0 0 var(--glow);
+  }
+  70%,
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55),
+      0 0 0 1px rgb(0 0 0 / 0.08),
+      0 0 0 18px transparent;
+  }
+}
+@keyframes live {
+  70%,
+  100% {
+    box-shadow: 0 0 0 8px rgb(34 197 94 / 0);
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes sticky-in {
+  from {
+    opacity: 0;
+    transform: translateY(110%);
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
+}
+@keyframes header-in {
+  to {
+    background-color: color-mix(in oklab, var(--bg) 82%, transparent);
+    border-bottom-color: var(--line);
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+}
+
+/* ---------- Theme switch: circular reveal via View Transitions ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+}
+.theme-toggle .moon {
+  display: none;
+}
+.dark .theme-toggle .sun {
+  display: none;
+}
+.dark .theme-toggle .moon {
+  display: block;
+}
+
+/* ---------- FAQ ---------- */
+.faq summary {
+  list-style: none;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq .plus {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.faq details[open] .plus {
+  transform: rotate(45deg);
+}
+.faq details[open] .faq-body {
+  animation: fade 0.35s ease both;
+}
+
+/* ---------- Wallet dialog ---------- */
+dialog.wallet-dialog {
+  margin: auto;
+  width: min(27rem, calc(100vw - 2rem));
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.5);
+}
+dialog.wallet-dialog[open] {
+  animation: pop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+dialog.wallet-dialog::backdrop {
+  background: rgb(10 8 4 / 0.6);
+  backdrop-filter: blur(6px);
+  animation: fade 0.3s ease both;
+}
+@media (max-width: 640px) {
+  dialog.wallet-dialog {
+    margin: auto auto 0;
+    width: 100%;
+    max-width: none;
+    border-radius: 1.75rem 1.75rem 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+}
